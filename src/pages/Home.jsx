@@ -1,25 +1,37 @@
-import React, {useEffect, useState} from "react"
-import {Link} from "react-router-dom"
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export const Home = () => {
-	const [posts, setPosts] = useState(null)
+  const [posts, setPosts] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-	useEffect(() => {
-		fetch("https://jsonplaceholder.typicode.com/posts")
-			.then(response => response.json())
-			.then(posts => setPosts(posts))
-	}, [])
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/posts")
+      .then((response) => response.json())
+      .then((posts) => setPosts(posts));
 
-	return (
-		<>
-			<h1>BlogPage</h1>
-			<section>
-				{posts?.map(item => (
-					<Link to={`/${item.id}`} key={item.id}>
-						<li>{item.title}</li>
-					</Link>
-				))}
-			</section>
-		</>
-	)
-}
+    setLoading(false);
+  }, []);
+
+  return (
+    <>
+      <h1>BlogPage</h1>
+
+      {loading && (
+        <div className="lds-ring">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      )}
+      <section>
+        {posts?.map((item) => (
+          <Link to={`/home/${item.id}`} key={item.id}>
+            <li>{item.title}</li>
+          </Link>
+        ))}
+      </section>
+    </>
+  );
+};
